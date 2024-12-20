@@ -24,6 +24,10 @@ const Apartment = sequelize.define('Apartment', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  roomNumber: {
+    type: DataTypes.DECIMAL,
+    allowNull: false,
+  },
   landlordId: {
     type: DataTypes.UUID,
     references: {
