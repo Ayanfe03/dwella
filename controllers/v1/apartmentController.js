@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const config = require('../../config/config');
 const jwt = require('jsonwebtoken');
-const Apartment = require('../../models/Apartment.js');
+const Apartment = require('../../models/Apartment');
 const User = require('../../models/User');
 const cloudinary = require('cloudinary').v2;
 
@@ -13,8 +13,10 @@ const createApartmentHandler = async (req, res) => {
   try {
     const { title, description, location } = req.body;
     const rentAmount = Number(req.body.rentAmount);
+    const roomNumber = Number(req.body.roomNumber);
 
-    if (!title || !description || !rentAmount || !location) {
+
+    if (!title || !description || !rentAmount || !location || !roomNumber) {
       return res.status(400).json({
         message: 'All fields are required',
       });
@@ -44,6 +46,12 @@ const createApartmentHandler = async (req, res) => {
       });
     }
 
+    if (typeof roomNumber !== 'number') {
+      return res.status(400).json({
+        message: 'Room Number must be a numer',
+      });
+    }
+
     const imageUrl = req.file ? req.file.path : null;
 
     const newApartment = await Apartment.create({
@@ -51,6 +59,7 @@ const createApartmentHandler = async (req, res) => {
       description, 
       rentAmount, 
       location, 
+      roomNumber,
       landlordId: req.user.id,
       imagePath: imageUrl,
       status: 'pending',
@@ -66,6 +75,7 @@ const createApartmentHandler = async (req, res) => {
       description: newApartment.description,
       rentAmount: newApartment.rentAmount,
       location: newApartment.location,
+      roomNumber: newApartment.roomNumber,
       status: newApartment.status,
       apartmentSold: newApartment.apartmentSold,
     })
@@ -115,14 +125,14 @@ const updateLandlordListing = async (req, res) => {
     const { id } = req.params;
     const landlordId = req.user.id;
 
-    const property = await Apartment.findOne({
+    const apartment = await Apartment.findOne({
       where: {
         id,
         landlordId
       }  
     })
 
-    if (!property) {
+    if (!apartment) {
       return res.status(404).json({
         message: 'Apartment not found'
       })
@@ -130,11 +140,11 @@ const updateLandlordListing = async (req, res) => {
 
     const { title, description, location } = req.body;
     const rentAmount = Number(req.body.rentAmount);
+    const roomNumber = Number(req.body.roomNumber);
 
-    const data = { title, description, rentAmount, location }
+    const data = { title, description, rentAmount, location, roomNumber }
 
-
-    let imagePath = property.imagePath;
+    let imagePath = apartment.imagePath;
 
     if (req.file) {
       if (imagePath) {
@@ -149,14 +159,13 @@ const updateLandlordListing = async (req, res) => {
       // data.imagePath = result.secure_url;
 
       imagePath = req.file.path
-      
     }
 
-    await property.update(data);
+    await apartment.update(data);
 
     return res.status(200).json({
       message: 'Apartment successfully updated',
-      property
+      apartment
     })   
   } catch (error) {
     return res.status(500).json({
