@@ -60,7 +60,7 @@ const sendpasswordResetEmail = async (email, passwordResetToken) => {
           We received a request to update the password for your Dwella Account.<br>
           To reset your password, click the link below:
         </p>
-        <a href="http://localhost:5000/v1/users/password-reset?passwordResetToken=${passwordResetToken}" style="
+        <a href="https://dwella.onrender.com/v1/users/password-reset?passwordResetToken=${passwordResetToken}" style="
              display: inline-block;
              padding: 7px 14px;
              color: #ffffff; 

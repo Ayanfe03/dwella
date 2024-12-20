@@ -57,7 +57,7 @@ const sendGmail = async (email, emailVerificationToken) => {
       <div class="email-body">
         <h1>Hi,</h1>
         <p>Thanks for signing up! Please verify your email address by clicking the link below:</p>
-        <a href="http://localhost:5000/v1/users/verify-email?emailVerificationToken=${emailVerificationToken}"  style="
+        <a href="https://dwella.onrender.com/v1/users/verify-email?emailVerificationToken=${emailVerificationToken}"  style="
              display: inline-block;
              padding: 7px 14px;
              color: #ffffff; 
