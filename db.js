@@ -2,9 +2,9 @@ const { Sequelize } = require('sequelize');
 const config = require('./config/config');
 
 
-const sequelize = new Sequelize(process.env.DB_URL, {
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
+const sequelize = new Sequelize(config.production.url, {
+  host: config.production.host,
+  port: config.production.port,
   dialect: 'postgres',
   logging: false,
   dialectOptions: {
