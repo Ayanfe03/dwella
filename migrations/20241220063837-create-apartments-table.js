@@ -35,6 +35,7 @@ module.exports = {
           model: 'Users',
           key: 'id'
         },
+        onDelete: 'CASCADE',
       },
       imagePath: {
         type: Sequelize.STRING,

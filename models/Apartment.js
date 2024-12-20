@@ -53,7 +53,7 @@ const Apartment = sequelize.define('Apartment', {
   timestamps: true,
 });
 
-Apartment.belongsTo(User, { foreignKey: 'landlordId', as: 'landlord' });
+Apartment.belongsTo(User, { foreignKey: 'landlordId', as: 'landlord', onDelete: 'CASCADE' });
 
 module.exports = Apartment;
 
