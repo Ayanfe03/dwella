@@ -3,7 +3,9 @@ const {
   createApartmentHandler, 
   getLandlordListings, 
   updateLandlordListing,
-  deleteLandlordListing 
+  deleteLandlordListing,
+  getAllApartmentListing,
+  searchFilterListings
 } = require('../../controllers/v1/apartmentController');
 const validateToken = require('../../middleware/auth');
 const authLandlord = require('../../middleware/authLandlord');
@@ -22,5 +24,12 @@ router.put('/:id', validateToken, authLandlord, upload.single('image'), updateLa
 
 // Route for Deleting a Landlord's listing by a landlord
 router.delete('/:id', validateToken, authLandlord, deleteLandlordListing);
+
+// Route for Retrieving All Listings
+router.get('', getAllApartmentListing);
+
+// Route for Retrieving All Listings
+router.get('/search', searchFilterListings);
+
 
 module.exports = router;

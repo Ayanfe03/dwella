@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken');
 const Apartment = require('../../models/Apartment');
 const User = require('../../models/User');
 const cloudinary = require('cloudinary').v2;
+const { Op } = require('sequelize');
 
 
 // @desc POST Creates Apartment Listing: Landlord
@@ -174,7 +175,7 @@ const updateLandlordListing = async (req, res) => {
   }
 }
 
-// @desc DELETE DELETE Apartment Listing for a Landlord
+// @desc DELETE Delete Apartment Listing for a Landlord
 // @route DELETE /v1/apartments/:id
 // @access Private
 const deleteLandlordListing = async (req, res) => {
@@ -198,9 +199,95 @@ const deleteLandlordListing = async (req, res) => {
   }
 }
 
+// @desc GET Retrieve All Approved Apartment Listings
+// @route GET /v1/apartments
+// @access Private
+const getAllApartmentListing = async (req, res) => {
+  try {
+    const apartments = await Apartment.findAll({ 
+      where: { 
+        status: 'approved', 
+        apartmentSold: false,
+      },
+      order: [['createdAt', 'DESC']]
+    });
+
+    return res.status(200).json({ 
+      message: 'Retrieved all Apartments successfully', 
+      apartments 
+    });
+
+  } catch (error) {
+    res.status(500).json({ 
+      message: error.message 
+    });
+  }
+};
+
+// @desc GET Retrieve Apartment Listings based on search and filters
+// @route GET /v1/apartments/search
+// @access Private
+const searchFilterListings = async (req, res) => {
+  try {
+    const { title, description, minRent, maxRent, minRooms, maxRooms, location, page = 1, limit = 10 } = req.query;
+
+    const whereFilter = {
+      status: 'approved', 
+      apartmentSold: false, // Ensuring only approved apartments are shown to tenants
+    };
+
+    // Filter by title (case-insensitive)
+    if (title) {
+      whereFilter.title = { [Op.iLike]: `%${title}%` };
+    }
+    
+    // Filter by description (case-insensitive)
+    if (description) {
+      whereFilter.description = { [Op.iLike]: `%${description}%` };
+    }
+    
+    // Filter by rent amount range
+    if (minRent && maxRent) {
+      whereFilter.rentAmount = { [Op.between]: [minRent, maxRent] };
+    } 
+    
+    // Filter by number of bedrooms
+    if (minRooms && maxRooms) {
+      whereFilter.roomNumber = { [Op.between]: [minRooms, maxRooms] };
+    }
+    
+    // Filter by location (case-insensitive)
+    if (location) {
+      whereFilter.location = { [Op.iLike]: `%${location}%` };
+    }
+
+    const offset = (page - 1) * limit;
+
+    const { count, rows: apartments } = await Apartment.findAndCountAll({
+      where: whereFilter,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+    });
+
+    res.status(200).json({
+      message: 'Successfully retrieved search results',
+      totalResults: count,
+      currentPage: parseInt(page),
+      totalPages: Math.ceil(count / limit),
+      apartments
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    })
+  }
+}
+
 module.exports = {
   createApartmentHandler,
   getLandlordListings,
   updateLandlordListing,
-  deleteLandlordListing
+  deleteLandlordListing,
+  getAllApartmentListing,
+  searchFilterListings
 }
