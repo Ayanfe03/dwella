@@ -7,6 +7,7 @@ const {
   approvePendingListing,
   rejectPendingListing,
   markListingAsSold,
+  deleteUserAccount
 } = require('../../controllers/v1/adminController');
 const adminValidateToken = require('../../middleware/authAdmin');
 const adminCheck = require('../../middleware/adminCheck');
@@ -33,6 +34,9 @@ router.put('/reject-listings/:id', adminValidateToken, rejectPendingListing);
 
 // Route to mark an apartment as sold by the admin
 router.put('/sold/:id', adminValidateToken, markListingAsSold);
+
+// Route to delete a user account by the admin
+router.delete('/delete/:id', adminValidateToken, deleteUserAccount);
 
 
 module.exports = router;

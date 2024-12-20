@@ -2,7 +2,8 @@ const config = require('../../config/config.js');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const Apartment = require('../../models/Apartment');
-const Admin = require('../../models/Admin.js');
+const Admin = require('../../models/Admin');
+const User = require('../../models/User');
 
 
 const validatePassword = (password) => {
@@ -281,6 +282,32 @@ const markListingAsSold = async (req, res) => {
   }
 };
 
+// @desc DELETE Delete A User Account
+// @route PUT /v1/admin/delete/:id
+// @access Private
+const deleteUserAccount = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByPk(id);
+
+    if (!user) {
+      return res.status(404).json({ 
+        message: 'User not found' 
+      });
+    }
+
+    await user.destroy();
+
+    return res.status(200).json({ 
+      message: 'User account deleted successfully' 
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message 
+    });
+  }
+};
+
 module.exports = {
   createFirstAdmin,
   createAdminHandler,
@@ -288,5 +315,6 @@ module.exports = {
   viewPendingListings,
   approvePendingListing,
   rejectPendingListing,
-  markListingAsSold
+  markListingAsSold,
+  deleteUserAccount
 }
