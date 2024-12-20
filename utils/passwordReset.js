@@ -83,7 +83,7 @@ const sendpasswordResetEmail = async (email, passwordResetToken) => {
     if (error) {
       return console.log(error)
     } else {
-      console.log('Password Reset Email sent: ' + info.response)
+      console.log('Password Reset Email sent: ', info.response)
     }
   });
 }

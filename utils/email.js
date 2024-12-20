@@ -80,7 +80,7 @@ const sendGmail = async (email, emailVerificationToken) => {
     if (error) {
       return console.log(error)
     } else {
-      console.log('Verification Email sent: ' + info.response)
+      console.log('Verification Email sent: ', info.response)
     }
   });
 }
