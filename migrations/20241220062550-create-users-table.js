@@ -21,6 +21,16 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
+      nationality: {
+        type: Sequelize.ENUM('Nigeria', 'Ghana', 'Kenya', 'Cameroon', 'South Africa', 'Togo'),
+        allowNull: false,
+        validate: {
+          isIn: {
+            args: [['Nigeria', 'Ghana', 'Kenya', 'Cameroon', 'South Africa', 'Togo']],
+            msg: 'Invalid nationality selected',
+          },
+        },
+      },
       gender: {
         type: Sequelize.STRING,
         allowNull: false,

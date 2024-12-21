@@ -16,10 +16,10 @@ const validatePassword = (password) => {
 // @access Public
 const createTenantHandler = async (req, res) => {
   try {
-    let { name, phoneNumber, occupation, gender, email, password, role, businessName } = req.body;
+    let { name, phoneNumber, occupation, nationality, gender, email, password, role, businessName } = req.body;
     const lowerCaseGender = gender.toLowerCase();
 
-    if (!name || !phoneNumber || !occupation || !gender || !email || !password || !role) {
+    if (!name || !phoneNumber || !occupation || !nationality || !gender || !email || !password || !role) {
       return res.status(400).json({
         message: 'All fields are required',
       });
@@ -90,6 +90,7 @@ const createTenantHandler = async (req, res) => {
       name,
       phoneNumber,
       occupation,
+      nationality,
       gender,
       email,
       password: hashedPassword,
@@ -106,6 +107,7 @@ const createTenantHandler = async (req, res) => {
       name: user.name,
       phoneNumber: user.phoneNumber,
       occupation: user.occupation,
+      nationality: user.nationality,
       gender: user.gender,
       email: user.email,
       role: user.role,
@@ -124,10 +126,10 @@ const createTenantHandler = async (req, res) => {
 // @access Public
 const createLandlordHandler = async (req, res) => {
   try {
-    let { name, phoneNumber, occupation, gender, email, businessName, password, role } = req.body;
+    let { name, phoneNumber, occupation, nationality, gender, email, businessName, password, role } = req.body;
     const lowerCaseGender = gender.toLowerCase();
 
-    if (!name || !phoneNumber || !occupation || !gender || !email || !password || !role) {
+    if (!name || !phoneNumber || !occupation || !nationality || !gender || !email || !password || !role) {
       return res.status(400).json({
         message: 'All fields except Business Name are required',
       });
@@ -192,6 +194,7 @@ const createLandlordHandler = async (req, res) => {
       name,
       phoneNumber,
       occupation,
+      nationality,
       gender,
       email,
       businessName,
@@ -209,6 +212,7 @@ const createLandlordHandler = async (req, res) => {
       name: user.name,
       phoneNumber: user.phoneNumber,
       occupation: user.occupation,
+      nationality: user.nationality,
       gender: user.gender,
       email: user.email,
       businessName: user.businessName,

@@ -19,6 +19,16 @@ const User = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  nationality: {
+    type: DataTypes.ENUM('Nigeria', 'Ghana', 'Kenya', 'Cameroon', 'South Africa', 'Togo'),
+    allowNull: false,
+    validate: {
+      isIn: {
+        args: [['Nigeria', 'Ghana', 'Kenya', 'Cameroon', 'South Africa', 'Togo']],
+        msg: 'Invalid nationality selected',
+      },
+    },
+  },
   gender: {
     type: DataTypes.STRING,
     allowNull: false,
