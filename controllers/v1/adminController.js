@@ -308,6 +308,20 @@ const deleteUserAccount = async (req, res) => {
   }
 };
 
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.findAll();
+    return res.status(200).json({
+      message: 'Users retrieved successfully',
+      users
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+}
+
 module.exports = {
   createFirstAdmin,
   createAdminHandler,
@@ -316,5 +330,6 @@ module.exports = {
   approvePendingListing,
   rejectPendingListing,
   markListingAsSold,
-  deleteUserAccount
+  deleteUserAccount,
+  getAllUsers
 }

@@ -7,7 +7,8 @@ const {
   approvePendingListing,
   rejectPendingListing,
   markListingAsSold,
-  deleteUserAccount
+  deleteUserAccount,
+  getAllUsers
 } = require('../../controllers/v1/adminController');
 const adminValidateToken = require('../../middleware/authAdmin');
 const adminCheck = require('../../middleware/adminCheck');
@@ -37,6 +38,9 @@ router.put('/sold/:id', adminValidateToken, markListingAsSold);
 
 // Route to delete a user account by the admin
 router.delete('/delete/:id', adminValidateToken, deleteUserAccount);
+
+// Route to get all users
+router.get('/users', adminValidateToken, getAllUsers);
 
 
 module.exports = router;
