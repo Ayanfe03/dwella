@@ -8,7 +8,8 @@ const {
   rejectPendingListing,
   markListingAsSold,
   deleteUserAccount,
-  getAllUsers
+  getAllUsers,
+  getUserHandler
 } = require('../../controllers/v1/adminController');
 const adminValidateToken = require('../../middleware/authAdmin');
 const adminCheck = require('../../middleware/adminCheck');
@@ -42,5 +43,7 @@ router.delete('/delete/:id', adminValidateToken, deleteUserAccount);
 // Route to get all users
 router.get('/users', adminValidateToken, getAllUsers);
 
+// Route to get a specific user by ID
+router.get('/:id', adminValidateToken, getUserHandler);
 
 module.exports = router;

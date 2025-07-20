@@ -322,6 +322,40 @@ const getAllUsers = async (req, res) => {
   }
 }
 
+// @desc GET Retrieves a User
+// @route GET /v1/admin/:id
+// @access Private
+const getUserHandler = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    if (typeof id !== 'string') {
+      return res.status(400).json({
+        message: 'Id must be a string'
+      })
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({
+        message: 'User not found',
+      });
+    }
+
+    res.status(200).json({
+      message: 'User retrieved successfully',
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: error.message,
+    });
+  }
+};
 module.exports = {
   createFirstAdmin,
   createAdminHandler,
@@ -331,5 +365,6 @@ module.exports = {
   rejectPendingListing,
   markListingAsSold,
   deleteUserAccount,
-  getAllUsers
+  getAllUsers,
+  getUserHandler,
 }
